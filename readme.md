@@ -10,7 +10,7 @@ The exact requirements depend on the baseline methods, e.g., for applying BPR on
 
 ## Description
 
- This repository is organized by task level, one can find the appropriate codebase based on the task and the corresponding baseline to train the model and evaluate the performance. For example, if one wants to test the performance of CQL+BPR on d4rl, the corresponding link is [here]().
+ This repository is organized by task level, one can find the appropriate codebase based on the task and the corresponding baseline to train the model and evaluate the performance. For example, if one wants to test the performance of CQL+BPR on d4rl, the corresponding link is [here](https://github.com/bit1029public/offline_bpr/tree/main/d4rl/baseline_plus_BPR/CQL_BPR_pretrain).
 
 ## Citation
 If you find this open source release useful, please reference in your paper:
