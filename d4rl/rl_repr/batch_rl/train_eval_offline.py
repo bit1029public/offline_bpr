@@ -153,8 +153,6 @@ flags.DEFINE_string('kl_regularizer', 'uniform',
                     'KL regularization for downstream learning')
 
 
-    
-
 def get_ctx_length():
     if not FLAGS.state_embed_dim or not FLAGS.learn_ctx:
         return None
@@ -393,14 +391,6 @@ def get_embed_model(env):
             fourier_dim=FLAGS.state_action_fourier_dim,
             sequence_length=FLAGS.embed_training_window,
             learning_rate=FLAGS.state_embed_lr)
-    elif FLAGS.embed_learner == 'barlow':
-        embed_model = embed.BarlowLearner(
-            env.observation_spec().shape[0],
-            env.action_spec(),
-            embedding_dim=FLAGS.state_embed_dim,
-            fourier_dim=FLAGS.state_action_fourier_dim,
-            sequence_length=FLAGS.embed_training_window,
-            learning_rate=FLAGS.state_embed_lr)
     elif FLAGS.embed_learner == 'contrastive':
         embed_model = embed.ContrastiveLearner(
             env.observation_spec().shape[0],
@@ -417,15 +407,7 @@ def get_embed_model(env):
             fourier_dim=FLAGS.state_action_fourier_dim,
             sequence_length=FLAGS.embed_training_window,
             learning_rate=FLAGS.state_embed_lr)
-    elif FLAGS.embed_learner == 'bprplus':
-        embed_model = embed.BPRContrastiveLearner(
-            env.observation_spec().shape[0],
-            env.action_spec(),
-            embedding_dim=FLAGS.state_embed_dim,
-            fourier_dim=FLAGS.state_action_fourier_dim,
-            sequence_length=FLAGS.embed_training_window,
-            learning_rate=FLAGS.state_embed_lr)
-        
+
     else:
         raise ValueError('Unknown embed learner %s.' % FLAGS.embed_learner)
 
@@ -691,7 +673,7 @@ def main(_):
                     average_returns = gym_env.get_normalized_score(
                         average_returns) * 100.0
                     print(average_returns)
-                    
+
             model.bc.policy.save_weights(
                 os.path.join(save_dir, 'model', 'model'))
         else:
@@ -798,20 +780,21 @@ def main(_):
                                   average_length, step=i+1)
                 print('evaluation/returns', average_returns)
                 print('evaluation/length', average_length)
-                
+
                 all_ret.append(average_returns)
                 timesteps.append(i)
                 save_ret = np.array(all_ret)
                 save_timesteps = np.array(timesteps)
-                eval_data = {'returns':save_ret, 'step':save_timesteps}
+                eval_data = {'returns': save_ret, 'step': save_timesteps}
                 eval_df = pd.DataFrame(eval_data)
                 eval_df.to_csv(save_dir+'/eval.csv', index=None)
 
     all_ret = np.array(all_ret)
     timesteps = np.array(timesteps)
-    eval_data = {'returns':all_ret, 'step':timesteps}
+    eval_data = {'returns': all_ret, 'step': timesteps}
     eval_df = pd.DataFrame(eval_data)
     eval_df.to_csv(save_dir+'/eval.csv', index=None)
+
 
 if __name__ == '__main__':
     app.run(main)
